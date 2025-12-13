@@ -1,5 +1,3 @@
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -108,9 +106,7 @@ export default function BlogPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header />
-
-      <main className="pt-24 pb-16">
+      <div className="pt-24 pb-16">
         {/* Hero Section */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="text-center mb-12">
@@ -246,9 +242,7 @@ export default function BlogPage() {
             </Link>
           </div>
         </div>
-      </main>
-
-      <Footer />
+      </div>
     </div>
   );
 }

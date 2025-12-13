@@ -1,5 +1,3 @@
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -125,8 +123,6 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header />
-
       <article className="pt-24 pb-16">
         {/* Hero Image */}
         <div className="relative h-[60vh] mb-12">
@@ -266,8 +262,6 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
           </div>
         </div>
       </article>
-
-      <Footer />
     </div>
   );
 }

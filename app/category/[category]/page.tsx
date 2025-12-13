@@ -1,5 +1,3 @@
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -264,9 +262,7 @@ export default function CategoryPage({ params }: { params: { category: string } 
 
   return (
     <div className="min-h-screen bg-white">
-      <Header />
-
-      <main className="pt-24 pb-16">
+      <div className="pt-24 pb-16">
         {/* Hero Section */}
         <div className="relative h-[50vh] mb-16">
           <Image
@@ -390,9 +386,7 @@ export default function CategoryPage({ params }: { params: { category: string } 
             </Link>
           </div>
         </div>
-      </main>
-
-      <Footer />
+      </div>
     </div>
   );
 }

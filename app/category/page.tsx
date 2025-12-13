@@ -1,5 +1,3 @@
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -57,9 +55,7 @@ const categories = [
 export default function CategoriesPage() {
   return (
     <div className="min-h-screen bg-white">
-      <Header />
-
-      <main className="pt-24 pb-16">
+      <div className="pt-24 pb-16">
         {/* Hero Section */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="text-center mb-12">
@@ -198,9 +194,7 @@ export default function CategoriesPage() {
             </div>
           </div>
         </div>
-      </main>
-
-      <Footer />
+      </div>
     </div>
   );
 }
