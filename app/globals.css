@@ -1,0 +1,235 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-pink: #ff6b9d;
+    --color-pink-dark: #e85a8a;
+    --color-coral: #ff8a80;
+    --color-rose: #ffb3ba;
+    --color-purple: #baa5ff;
+    --color-green: #a5d6a7;
+    --color-orange: #ffcc80;
+    --color-cream: #fff9f5;
+    --color-gray-light: #f5f5f5;
+  }
+
+  body {
+    @apply font-poppins antialiased;
+    font-feature-settings: 'kern' 1;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-playfair;
+  }
+}
+
+@layer components {
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-cream);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-pink);
+    border-radius: 6px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-pink-dark);
+  }
+
+  /* Image overlay effects */
+  .image-overlay {
+    @apply relative overflow-hidden;
+  }
+
+  .image-overlay::after {
+    @apply absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300;
+    content: '';
+  }
+
+  .image-overlay:hover::after {
+    @apply opacity-100;
+  }
+
+  .image-overlay img {
+    @apply transition-transform duration-500;
+  }
+
+  .image-overlay:hover img {
+    @apply scale-110;
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-pink via-coral to-rose bg-clip-text text-transparent;
+  }
+
+  /* Card hover effects */
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-2xl hover:-translate-y-2;
+  }
+
+  /* Button styles */
+  .btn-primary {
+    @apply px-6 py-3 bg-pink text-white font-semibold rounded-full hover:bg-pink-dark transition-all transform hover:scale-105 shadow-lg hover:shadow-xl;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 bg-white text-pink font-semibold rounded-full hover:bg-gray-50 transition-all transform hover:scale-105 shadow-lg hover:shadow-xl border-2 border-pink;
+  }
+
+  /* Category badges */
+  .category-badge {
+    @apply inline-block px-4 py-1.5 text-xs font-semibold uppercase tracking-wider rounded-full transition-all hover:scale-105;
+  }
+
+  .category-pink {
+    @apply bg-pink/10 text-pink border border-pink/30;
+  }
+
+  .category-coral {
+    @apply bg-coral/10 text-coral border border-coral/30;
+  }
+
+  .category-rose {
+    @apply bg-rose/10 text-rose border border-rose/30;
+  }
+
+  .category-purple {
+    @apply bg-purple/10 text-purple border border-purple/30;
+  }
+
+  .category-green {
+    @apply bg-green/10 text-green border border-green/30;
+  }
+
+  .category-orange {
+    @apply bg-orange/10 text-orange border border-orange/30;
+  }
+
+  /* Typography enhancements */
+  .drop-cap::first-letter {
+    @apply font-playfair text-6xl float-left leading-none mr-2 text-pink;
+  }
+
+  /* Loading animations */
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+
+  .skeleton {
+    @apply animate-pulse bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200;
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite;
+  }
+
+  /* Masonry grid fixes */
+  .masonry-grid {
+    display: grid;
+    grid-auto-flow: dense;
+  }
+
+  /* Selection color */
+  ::selection {
+    @apply bg-pink text-white;
+  }
+
+  ::-moz-selection {
+    @apply bg-pink text-white;
+  }
+
+  /* Focus styles */
+  *:focus-visible {
+    @apply outline-none ring-4 ring-pink/30 ring-offset-2;
+  }
+
+  /* Link underline animation */
+  .link-underline {
+    @apply relative;
+  }
+
+  .link-underline::after {
+    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-pink transition-all duration-300;
+    content: '';
+  }
+
+  .link-underline:hover::after {
+    @apply w-full;
+  }
+
+  /* Parallax effect helper */
+  .parallax {
+    @apply transition-transform duration-300;
+  }
+
+  /* Glass morphism */
+  .glass {
+    @apply bg-white/80 backdrop-blur-lg border border-white/20;
+  }
+
+  /* Gradient backgrounds */
+  .bg-gradient-pink {
+    background: linear-gradient(135deg, var(--color-pink) 0%, var(--color-coral) 100%);
+  }
+
+  .bg-gradient-soft {
+    background: linear-gradient(135deg, var(--color-cream) 0%, #ffffff 100%);
+  }
+
+  /* Text shadow for readability */
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+}
+
+@layer utilities {
+  /* Custom aspect ratios */
+  .aspect-square {
+    aspect-ratio: 1 / 1;
+  }
+
+  .aspect-portrait {
+    aspect-ratio: 3 / 4;
+  }
+
+  .aspect-landscape {
+    aspect-ratio: 4 / 3;
+  }
+
+  /* Truncate text helpers */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
