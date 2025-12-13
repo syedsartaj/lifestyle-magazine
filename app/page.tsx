@@ -195,7 +195,7 @@ export default function Home() {
               >
                 <CategoryPill
                   category={cat.name}
-                  color={cat.categoryColor}
+                  color={cat.color}
                   count={cat.count}
                   large
                 />

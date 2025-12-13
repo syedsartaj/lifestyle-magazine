@@ -3,7 +3,26 @@ import Footer from '@/components/Footer';
 import Link from 'next/link';
 import Image from 'next/image';
 
-const categoryData: Record<string, any> = {
+interface Article {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string;
+  author: string;
+  date: string;
+  readTime: string;
+  image: string;
+}
+
+interface CategoryData {
+  name: string;
+  description: string;
+  color: string;
+  heroImage: string;
+  articles: Article[];
+}
+
+const categoryData: Record<string, CategoryData> = {
   fashion: {
     name: "Fashion",
     description: "Discover the latest trends, style guides, and fashion inspiration for every season",

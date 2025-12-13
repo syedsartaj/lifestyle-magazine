@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Instagram, Twitter, Facebook, Pinterest, Youtube, Mail, Heart, MapPin } from 'lucide-react'
+import { Instagram, Twitter, Facebook, Youtube, Mail, Heart, MapPin, Pin } from 'lucide-react'
 
 const footerLinks = {
   categories: [
@@ -27,7 +27,7 @@ const footerLinks = {
 
 const socialMedia = [
   { name: 'Instagram', icon: Instagram, href: '#', color: 'hover:bg-pink' },
-  { name: 'Pinterest', icon: Pinterest, href: '#', color: 'hover:bg-coral' },
+  { name: 'Pinterest', icon: Pin, href: '#', color: 'hover:bg-coral' },
   { name: 'Twitter', icon: Twitter, href: '#', color: 'hover:bg-rose' },
   { name: 'Facebook', icon: Facebook, href: '#', color: 'hover:bg-purple' },
   { name: 'Youtube', icon: Youtube, href: '#', color: 'hover:bg-orange' },
