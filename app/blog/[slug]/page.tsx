@@ -1,124 +1,63 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { getSmakslyBlogBySlug, getSmakslyBlogs, formatBlogDate, estimateReadTime } from '@/lib/smaksly-blogs';
 
-// Sample article data (in production, this would come from a CMS or database)
-const articles = {
-  "summer-fashion-trends-2024": {
-    title: "Summer Fashion Trends You Need to Know",
-    category: "Fashion",
-    author: "Emma Richardson",
-    authorBio: "Fashion editor and style consultant with over 10 years of experience in the industry.",
-    date: "2024-06-15",
-    readTime: "5 min read",
-    image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&h=800&fit=crop",
-    content: `
-      <p class="lead">As the temperature rises and the days grow longer, it's time to refresh your wardrobe with the hottest trends of the season. This summer is all about bold colors, sustainable choices, and effortless elegance.</p>
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
-      <h2>1. Vibrant Color Blocking</h2>
-      <p>Say goodbye to muted tones and embrace the power of color! This summer, fashion is all about making a statement with bold, contrasting hues. Think hot pink paired with electric blue, or sunny yellow with vibrant orange. Don't be afraid to mix and match colors you wouldn't normally put together.</p>
+export default async function ArticlePage({ params }: { params: { slug: string } }) {
+  const blog = await getSmakslyBlogBySlug(params.slug)
 
-      <h2>2. Sustainable Fabrics Take Center Stage</h2>
-      <p>The fashion industry is finally embracing sustainability in a meaningful way. Look for pieces made from organic cotton, recycled polyester, and innovative materials like Tencel and hemp. These eco-friendly fabrics not only help the planet but also feel amazing against your skin in the summer heat.</p>
-
-      <h2>3. The Return of Maxi Dresses</h2>
-      <p>Flowing, floor-length maxi dresses are back and better than ever. This versatile piece can take you from beach to dinner with just a change of accessories. Look for bold prints, cutout details, and lightweight fabrics that move beautifully in the summer breeze.</p>
-
-      <h2>4. Minimalist Accessories</h2>
-      <p>While the clothing is bold, accessories are taking a more refined approach. Delicate gold chains, simple leather sandals, and structured tote bags in neutral tones provide the perfect balance to statement outfits. The key is to let your clothing shine while accessories provide subtle sophistication.</p>
-
-      <h2>5. Cutout Details Everywhere</h2>
-      <p>Strategic cutouts are adding interest to everything from swimwear to evening dresses. These carefully placed openings provide ventilation in the summer heat while adding a modern, edgy touch to classic silhouettes. Look for cutouts at the waist, shoulders, or back for maximum impact.</p>
-
-      <h2>How to Incorporate These Trends</h2>
-      <p>The key to pulling off these trends is confidence and personal style. Start by choosing one or two trends that speak to you and incorporate them into your existing wardrobe. Mix trendy pieces with classic staples to create looks that are both current and timeless.</p>
-
-      <p>Remember, fashion is about expressing yourself and having fun. Don't feel pressured to follow every trend – instead, choose the ones that make you feel amazing and align with your personal aesthetic.</p>
-    `,
-    tags: ["Summer Fashion", "Trends", "Style Guide", "Sustainable Fashion"],
-    relatedArticles: [
-      {
-        title: "Sustainable Fashion: Building an Eco-Wardrobe",
-        slug: "sustainable-fashion-eco-wardrobe",
-        category: "Fashion"
-      },
-      {
-        title: "Minimalist Living: How to Declutter Your Life",
-        slug: "minimalist-living-declutter",
-        category: "Lifestyle"
-      }
-    ]
-  },
-  "skincare-secrets-glowing-skin": {
-    title: "10 Skincare Secrets for Glowing Skin",
-    category: "Beauty",
-    author: "Sophia Chen",
-    authorBio: "Licensed esthetician and skincare expert specializing in natural beauty solutions.",
-    date: "2024-06-14",
-    readTime: "7 min read",
-    image: "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=1200&h=800&fit=crop",
-    content: `
-      <p class="lead">Achieving radiant, healthy skin doesn't have to be complicated or expensive. With these expert-approved tips and a consistent routine, you'll be glowing in no time.</p>
-
-      <h2>1. Double Cleansing is Non-Negotiable</h2>
-      <p>Start with an oil-based cleanser to remove makeup and sunscreen, followed by a water-based cleanser to clean your pores. This two-step process ensures your skin is truly clean without stripping its natural oils.</p>
-
-      <h2>2. Hydration from Within</h2>
-      <p>Drinking enough water is crucial for skin health. Aim for at least 8 glasses a day, and consider adding hydrating foods like cucumber, watermelon, and celery to your diet. Your skin will thank you with a natural, healthy glow.</p>
-
-      <h2>3. Never Skip Sunscreen</h2>
-      <p>Daily SPF protection is the single most important anti-aging step you can take. Apply a broad-spectrum sunscreen of at least SPF 30 every morning, even on cloudy days or when you're staying indoors.</p>
-
-      <h2>4. Invest in Quality Sleep</h2>
-      <p>Beauty sleep is real! Your skin repairs itself while you sleep, so aim for 7-9 hours of quality rest each night. Use a silk pillowcase to reduce friction and prevent sleep lines.</p>
-
-      <h2>5. The Power of Retinol</h2>
-      <p>Retinol is a proven ingredient for reducing fine lines, improving texture, and boosting cell turnover. Start with a low concentration and use it a few times a week, gradually building up as your skin adjusts.</p>
-
-      <h2>6. Exfoliate Regularly (But Gently)</h2>
-      <p>Remove dead skin cells with gentle exfoliation 2-3 times a week. Choose chemical exfoliants like AHAs and BHAs over harsh physical scrubs for better results and less irritation.</p>
-
-      <h2>7. Feed Your Skin</h2>
-      <p>A diet rich in antioxidants, omega-3 fatty acids, and vitamins will reflect on your skin. Include plenty of berries, leafy greens, fatty fish, and nuts in your meals.</p>
-
-      <h2>8. Facial Massage Magic</h2>
-      <p>Spend a few minutes each day massaging your face with your favorite serum or oil. This boosts circulation, helps with lymphatic drainage, and gives your skin an instant glow.</p>
-
-      <h2>9. Less is More</h2>
-      <p>Don't overload your skin with too many products. A simple routine with quality ingredients is more effective than a 10-step regimen with incompatible products.</p>
-
-      <h2>10. Consistency is Key</h2>
-      <p>The secret to great skin isn't a miracle product – it's consistency. Stick with your routine for at least 6-8 weeks before expecting to see significant results.</p>
-
-      <p>Remember, everyone's skin is different. What works for someone else might not work for you, so listen to your skin and adjust your routine accordingly. When in doubt, consult with a dermatologist or licensed esthetician.</p>
-    `,
-    tags: ["Skincare", "Beauty Tips", "Wellness", "Self Care"],
-    relatedArticles: [
-      {
-        title: "Meditation for Beginners: Start Your Journey",
-        slug: "meditation-for-beginners",
-        category: "Wellness"
-      },
-      {
-        title: "Minimalist Living: How to Declutter Your Life",
-        slug: "minimalist-living-declutter",
-        category: "Lifestyle"
-      }
-    ]
+  // If blog not found, show not found message
+  if (!blog) {
+    return (
+      <div className="min-h-screen bg-white">
+        <article className="pt-24 pb-16">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center py-20">
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                Article Not Found
+              </h1>
+              <p className="text-xl text-gray-600 mb-8">
+                This article could not be found. Please check back later or explore our other content.
+              </p>
+              <Link
+                href="/blog"
+                className="inline-block px-8 py-3 rounded-full text-white font-semibold hover:shadow-xl transition-all"
+                style={{ background: 'linear-gradient(135deg, #ff6b9d 0%, #ff8a80 100%)' }}
+              >
+                View All Articles
+              </Link>
+            </div>
+          </div>
+        </article>
+      </div>
+    )
   }
-};
 
-export default function ArticlePage({ params }: { params: { slug: string } }) {
-  const article = articles[params.slug as keyof typeof articles] || {
-    title: "Article Not Found",
-    category: "General",
-    author: "Editorial Team",
-    authorBio: "Our dedicated editorial team brings you the best content.",
-    date: new Date().toISOString(),
-    readTime: "5 min read",
-    image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&h=800&fit=crop",
-    content: "<p>This article could not be found. Please check back later or explore our other content.</p>",
-    tags: [],
-    relatedArticles: []
+  // Get related articles (up to 2 other blogs from same category or random)
+  const allBlogs = await getSmakslyBlogs()
+  const relatedArticles = allBlogs
+    .filter(b => b.slug !== blog.slug)
+    .filter(b => !blog.category || b.category === blog.category)
+    .slice(0, 2)
+    .map(b => ({
+      title: b.title,
+      slug: b.slug,
+      category: b.category || 'Lifestyle',
+    }))
+
+  const article = {
+    title: blog.title,
+    category: blog.category || 'Lifestyle',
+    author: 'Editorial Team',
+    authorBio: 'Our dedicated editorial team brings you the best content.',
+    date: new Date(blog.publish_date).toISOString().split('T')[0],
+    readTime: estimateReadTime(blog.body),
+    image: blog.image_url || 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&h=800&fit=crop',
+    content: blog.body,
+    tags: [] as string[],
+    relatedArticles,
   };
 
   return (

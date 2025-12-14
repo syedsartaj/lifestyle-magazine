@@ -1,106 +1,39 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { getSmakslyBlogs, formatBlogDate, estimateReadTime, SmakslyBlog } from '@/lib/smaksly-blogs';
 
-const articles = [
-  {
-    id: 1,
-    title: "Summer Fashion Trends You Need to Know",
-    slug: "summer-fashion-trends-2024",
-    excerpt: "Discover the hottest fashion trends taking over this summer season, from vibrant colors to sustainable fabrics.",
-    category: "Fashion",
-    author: "Emma Richardson",
-    date: "2024-06-15",
-    readTime: "5 min read",
-    image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&h=600&fit=crop",
-    featured: true
-  },
-  {
-    id: 2,
-    title: "10 Skincare Secrets for Glowing Skin",
-    slug: "skincare-secrets-glowing-skin",
-    excerpt: "Unlock the secrets to radiant, healthy skin with these expert-approved beauty tips and product recommendations.",
-    category: "Beauty",
-    author: "Sophia Chen",
-    date: "2024-06-14",
-    readTime: "7 min read",
-    image: "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=800&h=600&fit=crop",
-    featured: false
-  },
-  {
-    id: 3,
-    title: "Hidden Gems: European Cities You Must Visit",
-    slug: "hidden-gems-european-cities",
-    excerpt: "Explore stunning European destinations that are off the beaten path but absolutely worth adding to your travel bucket list.",
-    category: "Travel",
-    author: "Lucas Martinez",
-    date: "2024-06-13",
-    readTime: "8 min read",
-    image: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=800&h=600&fit=crop",
-    featured: true
-  },
-  {
-    id: 4,
-    title: "Minimalist Living: How to Declutter Your Life",
-    slug: "minimalist-living-declutter",
-    excerpt: "Transform your space and mindset with practical tips for embracing a minimalist lifestyle that brings peace and clarity.",
-    category: "Lifestyle",
-    author: "Olivia Banks",
-    date: "2024-06-12",
-    readTime: "6 min read",
-    image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&h=600&fit=crop",
-    featured: false
-  },
-  {
-    id: 5,
-    title: "Farm-to-Table: Seasonal Recipe Collection",
-    slug: "farm-to-table-seasonal-recipes",
-    excerpt: "Celebrate the season's bounty with these delicious, wholesome recipes featuring fresh, local ingredients.",
-    category: "Food",
-    author: "Isabella Thompson",
-    date: "2024-06-11",
-    readTime: "4 min read",
-    image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&h=600&fit=crop",
-    featured: false
-  },
-  {
-    id: 6,
-    title: "Meditation for Beginners: Start Your Journey",
-    slug: "meditation-for-beginners",
-    excerpt: "Learn the fundamentals of meditation and discover how this ancient practice can transform your mental wellness.",
-    category: "Wellness",
-    author: "Maya Patel",
-    date: "2024-06-10",
-    readTime: "5 min read",
-    image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&h=600&fit=crop",
-    featured: false
-  },
-  {
-    id: 7,
-    title: "Sustainable Fashion: Building an Eco-Wardrobe",
-    slug: "sustainable-fashion-eco-wardrobe",
-    excerpt: "Make conscious fashion choices with our guide to building a sustainable, stylish wardrobe that's kind to the planet.",
-    category: "Fashion",
-    author: "Emma Richardson",
-    date: "2024-06-09",
-    readTime: "6 min read",
-    image: "https://images.unsplash.com/photo-1558769132-cb1aea42c6f8?w=800&h=600&fit=crop",
-    featured: false
-  },
-  {
-    id: 8,
-    title: "Weekend Brunch Recipes to Impress",
-    slug: "weekend-brunch-recipes",
-    excerpt: "Elevate your weekend mornings with these stunning brunch recipes that are as beautiful as they are delicious.",
-    category: "Food",
-    author: "Isabella Thompson",
-    date: "2024-06-08",
-    readTime: "5 min read",
-    image: "https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=800&h=600&fit=crop",
-    featured: false
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
+// Helper to create excerpt from body
+function createExcerpt(body: string, maxLength: number = 150): string {
+  const textOnly = body.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
+  if (textOnly.length <= maxLength) return textOnly
+  return textOnly.substring(0, maxLength).trim() + '...'
+}
+
+// Transform SmakslyBlog to the format expected by the page
+function transformBlogToArticle(blog: SmakslyBlog, featured: boolean = false) {
+  return {
+    id: blog.id,
+    title: blog.title,
+    slug: blog.slug,
+    excerpt: createExcerpt(blog.body),
+    category: blog.category || 'Lifestyle',
+    author: 'Editorial Team',
+    date: new Date(blog.publish_date).toISOString().split('T')[0],
+    readTime: estimateReadTime(blog.body),
+    image: blog.image_url || 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&h=600&fit=crop',
+    featured,
   }
-];
+}
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const smakslyBlogs = await getSmakslyBlogs()
+
+  // Transform blogs - make first 2 featured
+  const articles = smakslyBlogs.map((blog, index) => transformBlogToArticle(blog, index < 2))
+
   const featuredArticles = articles.filter(article => article.featured);
   const regularArticles = articles.filter(article => !article.featured);
 
@@ -138,6 +71,18 @@ export default function BlogPage() {
             ))}
           </div>
         </div>
+
+        {/* Empty State */}
+        {articles.length === 0 && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center py-20">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">No Articles Yet</h2>
+              <p className="text-xl text-gray-600 mb-8">
+                Check back soon for inspiring content!
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Featured Articles Grid */}
         {featuredArticles.length > 0 && (
